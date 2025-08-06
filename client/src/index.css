@@ -160,8 +160,34 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
 }
 
+.ql-toolbar .ql-dictate {
+  width: 28px !important;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>') !important;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.ql-toolbar .ql-dictate.ql-active {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23E57373" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>') !important;
+}
+
 @media (min-width: 576px) {
   .notepad-editor-card {
     padding: 2rem;
   }
+}
+
+@media (max-width: 767.98px) {
+  .hero-section-overlay h1 { font-size: 2.5rem; }
+  .notepad-card .card-title { font-size: 1.2rem; }
+  .notepad-editor-title { font-size: 1.75rem !important; }
+}
+
+@media (max-width: 575.98px) {
+    .gallery-header h2 { font-size: 1.5rem; }
+    .gallery-header .btn { font-size: 0.875rem; }
+    .editor-header.flex-column .btn:first-of-type { margin-bottom: 0.5rem; }
+}
+
+@media (min-width: 576px) {
+  .notepad-editor-card { padding: 2rem; }
 }
