@@ -223,47 +223,6 @@ const NotepadEditor = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      console.warn("Speech recognition not supported in this browser.");
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => {
-      setIsListening(true);
-      document.querySelector('.ql-dictate')?.classList.add('ql-active');
-    };
-    recognition.onend = () => {
-      setIsListening(false);
-      document.querySelector('.ql-dictate')?.classList.remove('ql-active');
-    };
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-      setIsListening(false);
-    };
-    recognition.onresult = (event) => {
-      const quill = quillRef.current?.getEditor();
-      if (!quill) return;
-      const lastResult = event.results[event.results.length - 1];
-      if (lastResult.isFinal) {
-        const transcript = lastResult[0].transcript.trim() + '. ';
-        const range = quill.getSelection(true);
-        quill.insertText(range.index, transcript, 'user');
-        quill.setSelection(range.index + transcript.length);
-      }
-    };
-    
-    recognitionRef.current = recognition;
-
-    return () => { if (recognitionRef.current) recognitionRef.current.stop(); };
-  }, []);
-
   const handleSave = async () => {
     setSaveStatus('saving');
     setError('');
@@ -285,10 +244,44 @@ const NotepadEditor = () => {
   const handleListen = () => {
     if (isListening) {
       recognitionRef.current?.stop();
-    } else {
-      if (quillRef.current) quillRef.current.focus();
-      recognitionRef.current?.start();
+      setIsListening(false);
+      return;
     }
+
+    if (!recognitionRef.current) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        setError("Speech recognition is not supported in this browser.");
+        return;
+      }
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        setError(`Speech recognition error: ${event.error}`);
+        setIsListening(false);
+      };
+
+      recognition.onresult = (event) => {
+        const quill = quillRef.current?.getEditor();
+        if (!quill) return;
+        
+        const transcript = event.results[0][0].transcript.trim() + ' ';
+        const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+        quill.insertText(range.index, transcript, 'user');
+        quill.setSelection(range.index + transcript.length);
+      };
+      
+      recognitionRef.current = recognition;
+    }
+    
+    if (quillRef.current) quillRef.current.focus();
+    recognitionRef.current.start();
   };
 
   const quillModules = {
@@ -298,13 +291,9 @@ const NotepadEditor = () => {
         ['bold', 'italic', 'underline', 'strike'], 
         ['blockquote', 'code-block'],
         [{'list': 'ordered'}, {'list': 'bullet'}],
-        ['link'],
-        ['clean'],
-        ['dictate']
+        ['link'], ['clean'], ['dictate']
       ],
-      handlers: {
-        'dictate': handleListen,
-      },
+      handlers: { 'dictate': handleListen },
     },
   };
 
@@ -330,19 +319,16 @@ const NotepadEditor = () => {
       <Card className="notepad-editor-card">
         <Card.Body>
           <Form.Control 
-            type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
+            type="text" value={title} onChange={(e) => setTitle(e.target.value)} 
             className="mb-3 fs-2 border-0 shadow-none p-0 notepad-editor-title"
             placeholder="Notepad Title"
           />
-          <ReactQuill 
-            ref={quillRef}
-            theme="snow" 
-            value={content} 
-            onChange={setContent} 
-            modules={quillModules} 
-          />
+          <div className={isListening ? 'is-listening' : ''}>
+            <ReactQuill 
+              ref={quillRef} theme="snow" value={content} onChange={setContent} 
+              modules={quillModules} 
+            />
+          </div>
           <Accordion defaultActiveKey="0" className="mt-4">
             <Accordion.Item eventKey="0">
               <Accordion.Header>Scratch Pad</Accordion.Header>
