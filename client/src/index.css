@@ -1,0 +1,167 @@
+/* Import Bootstrap */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Define our Color Palette and Font Variables */
+:root {
+  --primary-color: #E57373;
+  --primary-hover: #D32F2F;
+  --background-color: #FDF8F0;
+  --card-background: rgba(255, 255, 255, 0.6);
+  --dark-text: #4E443C;
+  --light-text: #FFFFFF;
+  --border-color: rgba(255, 255, 255, 0.2);
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --font-family-body: 'Lato', sans-serif;
+  --font-family-heading: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--dark-text);
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-family-heading);
+  font-weight: 600;
+}
+
+/* --- Homepage Styles --- */
+.hero-section-overlay {
+  display: flex; align-items: center; justify-content: center; min-height: 100vh;
+  padding: 2rem;
+  background-image: url('https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-size: cover; background-position: center;
+}
+.auth-card-wrapper { max-width: 450px; width: 100%; }
+.auth-card {
+  background: var(--card-background); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color); border-radius: 1rem; box-shadow: 0 8px 32px 0 var(--shadow-color);
+}
+.auth-card .nav-tabs { border-bottom: 1px solid var(--border-color); }
+.auth-card .nav-tabs .nav-link { color: var(--dark-text); border: none; border-bottom: 3px solid transparent; }
+.auth-card .nav-tabs .nav-link.active { color: var(--primary-color); background-color: transparent; border-bottom: 3px solid var(--primary-color); }
+
+/* --- Global Button Styles --- */
+.btn-primary { background-color: var(--primary-color) !important; border-color: var(--primary-color) !important; }
+.btn-primary:hover { background-color: var(--primary-hover) !important; border-color: var(--primary-hover) !important; }
+
+/* --- Notepad Gallery Styles --- */
+.notepad-card {
+  aspect-ratio: 1 / 1; border-radius: 1rem !important; transition: all 0.2s ease-in-out;
+  position: relative; overflow: hidden; border: 1px solid #EAEAEA !important;
+  background-color: var(--light-text) !important; box-shadow: 0 4px 12px var(--shadow-color);
+  border-top: 4px solid var(--primary-color) !important;
+}
+.notepad-card:hover { transform: translateY(-6px); box-shadow: 0 10px 24px var(--shadow-color) !important; }
+.notepad-card .card-body { padding: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.notepad-card .card-title {
+  font-family: var(--font-family-heading); font-size: 1.5rem; font-weight: 600;
+  overflow-wrap: break-word; color: var(--dark-text);
+}
+.card-actions-overlay {
+  position: absolute; top: 0.5rem; right: 0.5rem; z-index: 10;
+  opacity: 0; transition: opacity 0.2s ease-in-out;
+}
+.notepad-card:hover .card-actions-overlay { opacity: 1; }
+.card-actions-overlay .dropdown-toggle::after { display: none; }
+.create-card-plus {
+    font-size: 3rem; font-weight: 200; line-height: 1; color: #BDBDBD;
+    transition: all 0.2s ease-in-out;
+}
+.notepad-card:hover .create-card-plus { color: var(--primary-color); transform: scale(1.1); }
+
+/* ============================================= */
+/* ========== RESPONSIVE STYLES (NEW) ========== */
+/* ============================================= */
+
+/* Media Query for screens smaller than 768px (tablets and phones) */
+@media (max-width: 767.98px) {
+  /* Homepage: Reduce hero title size */
+  .hero-section-overlay h1 {
+    font-size: 2.5rem;
+  }
+
+  /* Gallery: Reduce card title size */
+  .notepad-card .card-title {
+    font-size: 1.2rem;
+  }
+
+  /* Editor: Reduce main title size */
+  .notepad-editor-title {
+    font-size: 1.75rem !important; /* using !important to override Bootstrap's fs-2 */
+  }
+}
+
+/* Media Query for screens smaller than 576px (phones) */
+@media (max-width: 575.98px) {
+    /* Gallery: Make the space title smaller */
+    .gallery-header h2 {
+        font-size: 1.5rem;
+    }
+    .gallery-header .btn {
+        font-size: 0.875rem;
+    }
+
+    /* Editor: Add some space between stacked header buttons */
+    .editor-header.flex-column .btn:first-of-type {
+        margin-bottom: 0.5rem;
+    }
+}
+/* ============================================= */
+/* ====== Notepad Editor Page Styles (NEW) ===== */
+/* ============================================= */
+
+/* Style for the main white "page" card */
+.notepad-editor-card {
+  border-radius: 1rem !important;
+  border: 1px solid #EAEAEA !important;
+  background-color: var(--light-text) !important;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  padding: 1rem;
+}
+
+/* Make the Quill editor blend in seamlessly */
+.notepad-editor-card .ql-toolbar {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+.notepad-editor-card .ql-container {
+  min-height: 300px;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+
+/* Custom styles to re-color the Bootstrap Accordion */
+.accordion-button {
+  background-color: #f9f9f9 !important;
+  color: var(--dark-text) !important;
+  box-shadow: none !important;
+}
+
+/* Style for when the accordion is open */
+.accordion-button:not(.collapsed) {
+  background-color: var(--primary-color) !important;
+  color: var(--light-text) !important;
+}
+
+/* Re-coloring the accordion arrow icon */
+.accordion-button::after {
+  filter: grayscale(1) brightness(1.5); /* A simple filter for the default state */
+}
+
+.accordion-button:not(.collapsed)::after {
+  /* This filter turns the icon white for the open state */
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+}
+
+@media (min-width: 576px) {
+  .notepad-editor-card {
+    padding: 2rem;
+  }
+}
