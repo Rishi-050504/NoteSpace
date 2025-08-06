@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api', // Your backend URL
+  baseURL: '/api', // Your backend URL
 });
 
 // Interceptor to add the auth token to every request
